@@ -30,13 +30,14 @@ int main(int argc, char **argv)
 				write(STDOUT_FILENO, "\n", 1);
 			break;
 		}
-		line_num++;
 		trim_newline(line);
 		if (line[0] == '\0')
 			continue;
+		line_num++;
 		execute_command(line, argv[0], line_num);
 	}
 
 	free(line);
 	return (0);
 }
+
