@@ -63,8 +63,10 @@ char **tokenize(char *line)
  * @line: the command string
  * @prog_name: name of the shell (argv[0])
  * @line_num: current line number for error messages
+ *
+ * Return: exit status of the command
  */
-void execute_command(char *line, char *prog_name, int line_num)
+int execute_command(char *line, char *prog_name, int line_num)
 {
 	pid_t pid;
 	int status;
@@ -73,16 +75,15 @@ void execute_command(char *line, char *prog_name, int line_num)
 	char *full_path;
 	args = tokenize(line);
 	if (!args)
-		return;
+		return (0);
 	cmd = args[0];
-	/* Find command in PATH before forking */
 	full_path = find_in_path(cmd);
 	if (!full_path)
 	{
 		fprintf(stderr, "%s: %d: %s: not found\n",
 			prog_name, line_num, cmd);
 		free(args);
-		return;
+		return (127);
 	}
 	pid = fork();
 	if (pid == -1)
@@ -90,7 +91,7 @@ void execute_command(char *line, char *prog_name, int line_num)
 		perror("fork");
 		free(full_path);
 		free(args);
-		return;
+		return (1);
 	}
 	if (pid == 0)
 	{
@@ -108,5 +109,7 @@ void execute_command(char *line, char *prog_name, int line_num)
 		wait(&status);
 		free(full_path);
 		free(args);
+		return (WEXITSTATUS(status));
 	}
+	return (0);
 }

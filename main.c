@@ -1,11 +1,10 @@
 #include "shell.h"
-
 /**
  * main - entry point for the simple shell
  * @argc: argument count
  * @argv: argument vector
  *
- * Return: 0 on success
+ * Return: last command exit status
  */
 int main(int argc, char **argv)
 {
@@ -14,15 +13,13 @@ int main(int argc, char **argv)
 	ssize_t nread;
 	int interactive;
 	int line_num = 0;
-
+	int last_status = 0;
 	(void)argc;
 	interactive = isatty(STDIN_FILENO);
-
 	while (1)
 	{
 		if (interactive)
 			display_prompt();
-
 		nread = getline(&line, &len, stdin);
 		if (nread == -1)
 		{
@@ -34,10 +31,8 @@ int main(int argc, char **argv)
 		if (line[0] == '\0')
 			continue;
 		line_num++;
-		execute_command(line, argv[0], line_num);
+		last_status = execute_command(line, argv[0], line_num);
 	}
-
 	free(line);
-	return (0);
+	return (last_status);
 }
-
