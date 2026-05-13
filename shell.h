@@ -14,6 +14,6 @@ void display_prompt(void);
 void execute_command(char *line, char *prog_name, int line_num);
 char *trim_newline(char *str);
 char **tokenize(char *line);
-
+char *find_in_path(char *cmd);
 #endif
 
