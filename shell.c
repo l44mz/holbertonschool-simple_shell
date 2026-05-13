@@ -77,6 +77,12 @@ int execute_command(char *line, char *prog_name, int line_num)
 	if (!args)
 		return (0);
 	cmd = args[0];
+	/* Handle exit built-in */
+	if (strcmp(cmd, "exit") == 0)
+	{
+		free(args);
+		exit(0);
+	}
 	full_path = find_in_path(cmd);
 	if (!full_path)
 	{
