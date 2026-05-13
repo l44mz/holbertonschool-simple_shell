@@ -27,8 +27,9 @@ char *find_in_path(char *cmd)
 	}
 	if (!environ[i])
 		return (NULL);
-
 	path_env = environ[i] + 5;
+	if (*path_env == '\0')
+		return (NULL);
 	path_copy = strdup(path_env);
 	if (!path_copy)
 		return (NULL);
