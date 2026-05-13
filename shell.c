@@ -64,9 +64,9 @@ char **tokenize(char *line)
  * @prog_name: name of the shell (argv[0])
  * @line_num: current line number for error messages
  *
- * Return: exit status of the command
+ * Return: exit status of the command, -2 for exit built-in
  */
-int execute_command(char *line, char *prog_name, int line_num, int last_status)
+int execute_command(char *line, char *prog_name, int line_num)
 {
 	pid_t pid;
 	int status;
@@ -81,7 +81,7 @@ int execute_command(char *line, char *prog_name, int line_num, int last_status)
 	if (strcmp(cmd, "exit") == 0)
 	{
 		free(args);
-		return(-2);
+		return (-2);
 	}
 	full_path = find_in_path(cmd);
 	if (!full_path)

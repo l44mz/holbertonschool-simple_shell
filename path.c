@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * find_in_path - searches for a command in the PATH directories
  * @cmd: the command to search for
@@ -10,7 +9,6 @@ char *find_in_path(char *cmd)
 {
 	char *path_env, *path_copy, *dir, *full_path;
 	int i;
-
 	/* If cmd contains '/', use it directly */
 	if (strchr(cmd, '/'))
 	{
@@ -18,7 +16,6 @@ char *find_in_path(char *cmd)
 			return (strdup(cmd));
 		return (NULL);
 	}
-
 	/* Get PATH from environment */
 	for (i = 0; environ[i]; i++)
 	{
@@ -33,11 +30,9 @@ char *find_in_path(char *cmd)
 	path_copy = strdup(path_env);
 	if (!path_copy)
 		return (NULL);
-
 	dir = strtok(path_copy, ":");
 	while (dir)
 	{
-		/* allocate: dir + '/' + cmd + '\0' */
 		full_path = malloc(strlen(dir) + strlen(cmd) + 2);
 		if (!full_path)
 		{
@@ -47,7 +42,6 @@ char *find_in_path(char *cmd)
 		strcpy(full_path, dir);
 		strcat(full_path, "/");
 		strcat(full_path, cmd);
-
 		if (access(full_path, X_OK) == 0)
 		{
 			free(path_copy);

@@ -14,6 +14,7 @@ int main(int argc, char **argv)
 	int interactive;
 	int line_num = 0;
 	int last_status = 0;
+	int prev_status = 0;
 	(void)argc;
 	interactive = isatty(STDIN_FILENO);
 	while (1)
@@ -31,10 +32,11 @@ int main(int argc, char **argv)
 		if (line[0] == '\0')
 			continue;
 		line_num++;
+		prev_status = last_status;
 		last_status = execute_command(line, argv[0], line_num);
 		if (last_status == -2)
 			break;
 	}
 	free(line);
-	return (0);
+	return (last_status == -2 ? prev_status : last_status);
 }
