@@ -81,7 +81,7 @@ int execute_command(char *line, char *prog_name, int line_num)
 	if (strcmp(cmd, "exit") == 0)
 	{
 		free(args);
-		return(-1);
+		return(-2);
 	}
 	full_path = find_in_path(cmd);
 	if (!full_path)
