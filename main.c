@@ -32,6 +32,8 @@ int main(int argc, char **argv)
 			continue;
 		line_num++;
 		last_status = execute_command(line, argv[0], line_num);
+		if (last_status == -1)
+			break;
 	}
 	free(line);
 	return (last_status);
