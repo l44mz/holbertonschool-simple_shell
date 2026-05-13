@@ -66,7 +66,7 @@ char **tokenize(char *line)
  *
  * Return: exit status of the command
  */
-int execute_command(char *line, char *prog_name, int line_num)
+int execute_command(char *line, char *prog_name, int line_num, int last_status)
 {
 	pid_t pid;
 	int status;
