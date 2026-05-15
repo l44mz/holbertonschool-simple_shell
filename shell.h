@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 extern char **environ;
 void display_prompt(void);
-int execute_command(char *line, char *prog_name, int line_num);
+void execute_command(char *line, char *prog_name, int line_num);
 void builtin_env(void);
 char *trim_newline(char *str);
 char **tokenize(char *line);
