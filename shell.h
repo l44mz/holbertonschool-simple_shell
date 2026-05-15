@@ -1,4 +1,4 @@
-#ifndef SHELL_H
+i#ifndef SHELL_H
 #define SHELL_H
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +9,7 @@
 extern char **environ;
 void display_prompt(void);
 int execute_command(char *line, char *prog_name, int line_num);
+void builtin_env(void);
 char *trim_newline(char *str);
 char **tokenize(char *line);
 char *find_in_path(char *cmd);
