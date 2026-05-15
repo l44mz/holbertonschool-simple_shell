@@ -83,50 +83,75 @@ void builtin_env(void)
 /**
  * execute_command - forks and executes a command
  * @line: the command string
- * @prog_name: name of the shell (argv[0])
- * @line_num: current line number for error messages
+ * @prog_name: shell name
+ * @line_num: line number
+ *
+ * Return: command exit status
  */
-void execute_command(char *line, char *prog_name, int line_num)
+int execute_command(char *line, char *prog_name, int line_num)
 {
 	pid_t pid;
 	int status;
 	char **args;
-	char *cmd;
+	char *cmd, *full_path;
 
 	args = tokenize(line);
 	if (!args)
-		return;
+		return (0);
 
 	cmd = args[0];
+	
+	if (strcmp(cmd, "exit") == 0)
+	{
+		free(args);
+		return (-2);
+	}
 
+	
 	if (strcmp(cmd, "env") == 0)
 	{
 		builtin_env();
 		free(args);
-		return;
+		return (0);
+	}
+
+	full_path = find_in_path(cmd);
+
+	if (!full_path)
+	{
+		fprintf(stderr, "%s: %d: %s: not found\n",
+			prog_name, line_num, cmd);
+		free(args);
+		return (127);
 	}
 
 	pid = fork();
+
 	if (pid == -1)
 	{
 		perror("fork");
+		free(full_path);
 		free(args);
-		return;
+		return (1);
 	}
 
 	if (pid == 0)
 	{
-		if (execve(cmd, args, environ) == -1)
-		{
-			fprintf(stderr, "%s: %d: %s: not found\n",
-				prog_name, line_num, cmd);
-			free(args);
-			exit(127);
-		}
+		execve(full_path, args, environ);
+		perror("execve");
+		free(full_path);
+		free(args);
+		exit(127);
 	}
 	else
 	{
 		wait(&status);
+		free(full_path);
 		free(args);
+
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
 	}
+
+	return (1);
 }

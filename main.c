@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * main - entry point for the simple shell
  * @argc: argument count
@@ -15,12 +16,15 @@ int main(int argc, char **argv)
 	int line_num = 0;
 	int last_status = 0;
 	int prev_status = 0;
+
 	(void)argc;
 	interactive = isatty(STDIN_FILENO);
+
 	while (1)
 	{
 		if (interactive)
 			display_prompt();
+
 		nread = getline(&line, &len, stdin);
 		if (nread == -1)
 		{
@@ -37,6 +41,7 @@ int main(int argc, char **argv)
 		if (last_status == -2)
 			break;
 	}
+
 	free(line);
 	return (last_status == -2 ? prev_status : last_status);
 }
